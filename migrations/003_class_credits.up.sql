@@ -1,0 +1,4 @@
+
+ALTER TABLE classes
+ADD COLUMN credits INTEGER NOT NULL DEFAULT 3
+CHECK (credits > 0);
