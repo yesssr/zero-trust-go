@@ -11,6 +11,11 @@ import (
 	"github.com/yesssr/zero-trust-go/internal/middleware"
 )
 
+const (
+	from = 7
+	to   = 21
+)
+
 type Handler struct {
 	Repository      *Repository
 	TranskripClient *TranskripClient
@@ -172,10 +177,7 @@ func (h *Handler) UpdateGrade(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	from := 1
-	to := 21
-
-	if !isWithinAccessHours(time.Now(), from, to) {
+	if !isWithinAccessHours(time.Now()) {
 		httpx.WriteJSONErr(
 			w,
 			http.StatusForbidden,
@@ -266,10 +268,7 @@ func (h *Handler) FinalizeClass(
 		return
 	}
 
-	from := 1
-	to := 21
-
-	if !isWithinAccessHours(time.Now(), from, to) {
+	if !isWithinAccessHours(time.Now()) {
 		httpx.WriteJSONErr(
 			w,
 			http.StatusForbidden,
@@ -333,7 +332,7 @@ func (h *Handler) FinalizeClass(
 	)
 }
 
-func isWithinAccessHours(now time.Time, from, to int) bool {
+func isWithinAccessHours(now time.Time) bool {
 	location, err := time.LoadLocation("Asia/Jakarta")
 	if err != nil {
 		return false
